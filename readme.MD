@@ -94,7 +94,7 @@ Slot No. Registration No.
 
 To be able to compile / run the application you need the followings:
 - Internet connection to build the app for the first time.
-- JDK 11+ (Can be downloaded from https://adoptopenjdk.net/)
+- JDK 11+ (Can be downloaded from https://adoptium.net/)
 - Gradle 7.4+ (Can be downloaded from https://gradle.org/install/)
   or you can use the bundled wrapper
 
