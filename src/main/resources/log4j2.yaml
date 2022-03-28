@@ -1,0 +1,40 @@
+Configuration:
+  status: warn
+
+  appenders:
+    Console:
+      name: LogToConsole
+      PatternLayout:
+        Pattern: "%msg%n"
+
+    RollingFile:
+      - name: LogToRollingFile
+        fileName: logs/parking.log
+        filePattern: "logs/$${date:yyyy-MM}/parking-%d{yyyy-MM-dd}-%i.log.gz"
+        PatternLayout:
+          pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %c{1}:%L [%p] %m%n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: 10MB
+        DefaultRollOverStrategy:
+          max: 10
+
+  Loggers:
+    logger:
+      - name: DefaultLogger
+        level: debug
+        additivity: false
+        AppenderRef:
+          - ref: LogToRollingFile
+
+      - name: CommandLogger
+        level: info
+        additivity: false
+        AppenderRef:
+          - ref: LogToConsole
+          - ref: LogToRollingFile
+
+    Root:
+      level: debug
+      AppenderRef:
+        ref: LogToRollingFile

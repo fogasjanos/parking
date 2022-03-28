@@ -1,0 +1,21 @@
+Configuration:
+  status: warn
+
+  appenders:
+    Console:
+      name: LogToConsole
+      PatternLayout:
+        Pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %c{1}:%L [%p] %m%n"
+
+  Loggers:
+    logger:
+      - name: CommandLogger
+        level: debug
+        additivity: false
+        AppenderRef:
+          - ref: LogToConsole
+
+    Root:
+      level: debug
+      AppenderRef:
+        ref: LogToConsole

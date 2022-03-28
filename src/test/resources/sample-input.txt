@@ -1,0 +1,18 @@
+create 6
+park HUB-1234
+park HUB-9999
+park ABE-0001
+park HUB-7777
+park HUB-2701
+park HUB-3141
+leave HUB-3141 4
+status
+park VIK-333
+park GAB-999
+leave HUB-1234 4
+leave ABE-0001 6
+leave GAB-999 2
+park JAN-0987
+park LAC-1111
+park JAN-0123
+status

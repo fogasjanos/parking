@@ -1,0 +1,22 @@
+Configuration:
+  status: warn
+
+  appenders:
+    Console:
+      name: LogToConsole
+      PatternLayout:
+        Pattern: "%msg%n"
+
+  Loggers:
+    logger:
+      - name: CommandLogger
+        level: info
+        additivity: false
+        AppenderRef:
+          - ref: LogToConsole
+
+    Root:
+      level: info
+      AppenderRef:
+        ref: LogToConsole
+
