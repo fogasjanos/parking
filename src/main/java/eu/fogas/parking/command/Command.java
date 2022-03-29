@@ -2,7 +2,6 @@ package eu.fogas.parking.command;
 
 import eu.fogas.parking.exception.InvalidParameterRuntimeException;
 import eu.fogas.parking.lot.ParkingLot;
-import org.slf4j.Logger;
 
 public interface Command {
     String getName();

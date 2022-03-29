@@ -18,14 +18,14 @@ public class ConfigProvider {
     }
 
     public ConfigProvider(String configName) {
-        try (InputStream input = this.getClass().getClassLoader().getResourceAsStream(DEFAULT_CONFIG_NAME)) {
+        try (InputStream input = this.getClass().getClassLoader().getResourceAsStream(configName)) {
             if (input == null) {
-                log.error("Unable to find {}", DEFAULT_CONFIG_NAME);
+                log.error("Unable to find {}", configName);
                 return;
             }
             properties.load(input);
         } catch (IOException ioe) {
-            log.error("Cannot read config file: {}", DEFAULT_CONFIG_NAME, ioe);
+            log.error("Cannot read config file: {}", configName, ioe);
         }
     }
 

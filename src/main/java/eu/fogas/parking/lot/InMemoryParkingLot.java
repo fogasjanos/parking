@@ -6,7 +6,7 @@ import eu.fogas.parking.config.ChargeConfig;
 import eu.fogas.parking.config.ConfigProvider;
 import eu.fogas.parking.exception.InvalidParameterRuntimeException;
 import eu.fogas.parking.exception.InvalidParkingStateRuntimeException;
-import eu.fogas.parking.lot.model.TicketModel;
+import eu.fogas.parking.lot.model.Ticket;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
 @Slf4j
 public class InMemoryParkingLot implements ParkingLot {
     private final SortedSet<Integer> freeSlots;
-    private final Map<String, TicketModel> tickets;
+    private final Map<String, Ticket> tickets;
     private final Verify verify;
     private final Charger charger;
 
@@ -34,8 +34,9 @@ public class InMemoryParkingLot implements ParkingLot {
 
     @Override
     public void create(int numberOfSlots) {
-        verify.numberOfSlots(numberOfSlots);
-        reset();
+        verify.parkingLotNotCreated()
+                .numberOfSlots(numberOfSlots);
+
         IntStream.rangeClosed(1, numberOfSlots)
                 .boxed()
                 .forEach(freeSlots::add);
@@ -53,7 +54,7 @@ public class InMemoryParkingLot implements ParkingLot {
         }
         var slot = freeSlots.first();
         freeSlots.remove(slot);
-        tickets.put(carNumber, new TicketModel(slot, carNumber));
+        tickets.put(carNumber, new Ticket(slot, carNumber));
         return Optional.of(slot);
     }
 
@@ -66,16 +67,16 @@ public class InMemoryParkingLot implements ParkingLot {
         if (ticket == null) {
             return Optional.empty();
         }
-        int slotNumber = ticket.getSlotNumber();
+        int slotNumber = ticket.slotNumber();
         freeSlots.add(slotNumber);
         return Optional.of(slotNumber);
     }
 
     @Override
-    public Set<TicketModel> status() {
+    public Set<Ticket> status() {
         return Set.copyOf(tickets.values())
                 .stream()
-                .sorted(Comparator.comparingInt(TicketModel::getSlotNumber))
+                .sorted(Comparator.comparingInt(Ticket::slotNumber))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
@@ -89,16 +90,21 @@ public class InMemoryParkingLot implements ParkingLot {
         return charger;
     }
 
-    void reset() {
-        freeSlots.clear();
-        tickets.clear();
-    }
-
     private class Verify {
+        private boolean isInited() {
+            return !tickets.isEmpty() || !freeSlots.isEmpty();
+        }
 
         private Verify parkingLotCreated() {
-            if (tickets.isEmpty() && freeSlots.isEmpty()) {
+            if (!isInited()) {
                 throw new InvalidParkingStateRuntimeException("Parking lot not created!");
+            }
+            return this;
+        }
+
+        private Verify parkingLotNotCreated() {
+            if (isInited()) {
+                throw new InvalidParkingStateRuntimeException("Parking lot already created!");
             }
             return this;
         }

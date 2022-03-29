@@ -1,15 +1,12 @@
 package eu.fogas.parking.command;
 
 import eu.fogas.parking.exception.InvalidParameterRuntimeException;
-import eu.fogas.parking.lot.ParkingLot;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AbstractCommandTest {
-
-    private final AbstractCommand command = new DummyAbstractCommand();
 
     @Test
     void parseInt_shouldThrowInvalidParameterRuntimeException_whenParameterIsNull() {
@@ -81,30 +78,5 @@ class AbstractCommandTest {
         AbstractCommand.isNotNull("emptyParameter", "");
         AbstractCommand.isNotNull("whitespaceParameter", " \t \r \n ");
         AbstractCommand.isNotNull("normalParameter", "parameterValue");
-    }
-
-    static class DummyAbstractCommand extends AbstractCommand {
-        private int parametersCount;
-
-        public void setParametersCount(int parametersCount) {
-            this.parametersCount = parametersCount;
-        }
-
-        @Override
-        public int getParametersCount() {
-            return parametersCount;
-        }
-
-
-        @Override
-        public String getName() {
-            // dummy implementation
-            return null;
-        }
-
-        @Override
-        public void process(ParkingLot parkingLot, String... params) throws InvalidParameterRuntimeException {
-            // dummy implementation, do nothing
-        }
     }
 }

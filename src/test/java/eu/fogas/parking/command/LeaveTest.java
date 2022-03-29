@@ -3,7 +3,6 @@ package eu.fogas.parking.command;
 import eu.fogas.parking.charge.ChargeCalculator;
 import eu.fogas.parking.exception.InvalidParameterRuntimeException;
 import eu.fogas.parking.lot.ParkingLot;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

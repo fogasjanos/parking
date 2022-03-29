@@ -55,22 +55,10 @@ public class App {
         log.debug("Command: {} {}", command, params);
         try {
             switch (params.length) {
-                case 0: {
-                    command.process(parkingLot);
-                    break;
-                }
-                case 1: {
-                    command.process(parkingLot, params[0]);
-                    break;
-                }
-                case 2: {
-                    command.process(parkingLot, params[0], params[1]);
-                    break;
-                }
-                default: {
-                    command.process(parkingLot, params);
-                    break;
-                }
+                case 0 -> command.process(parkingLot);
+                case 1 -> command.process(parkingLot, params[0]);
+                case 2 -> command.process(parkingLot, params[0], params[1]);
+                default -> command.process(parkingLot, params);
             }
         } catch (ParkingRuntimeException pre) {
             commandLog.info(pre.getMessage());

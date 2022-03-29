@@ -94,9 +94,9 @@ Slot No. Registration No.
 
 To be able to compile / run the application you need the followings:
 - Internet connection to build the app for the first time.
-- JDK 11+ (Can be downloaded from https://adoptium.net/)
 - Gradle 7.4+ (Can be downloaded from https://gradle.org/install/)
   or you can use the bundled wrapper
+- JDK 14+ (Can be downloaded from https://adoptium.net/)
 
 
 ## How to build
@@ -154,4 +154,5 @@ gradlew run < src/test/resources/sample-input.txt
 
 
 # Possible improvements
-- AppTest is failing when all tests run on the same time
+- AppTest is failing when all tests run from IntelliJ IDEA on src/test right-click "Run all Tests Ctlr+Alt+F10" but it's
+fine when run from gradle. Or when you type gradlew test into the IDEA's console and hit Ctlr+Enter.

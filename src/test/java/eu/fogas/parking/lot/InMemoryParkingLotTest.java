@@ -3,8 +3,7 @@ package eu.fogas.parking.lot;
 import eu.fogas.parking.config.ConfigProvider;
 import eu.fogas.parking.exception.InvalidParameterRuntimeException;
 import eu.fogas.parking.exception.InvalidParkingStateRuntimeException;
-import eu.fogas.parking.lot.model.TicketModel;
-import org.junit.jupiter.api.BeforeEach;
+import eu.fogas.parking.lot.model.Ticket;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,11 +21,6 @@ class InMemoryParkingLotTest {
     @Mock
     private ConfigProvider configProvider;
 
-    @BeforeEach
-    void setUp() {
-        parkingLot.reset();
-    }
-
     @Test
     void create_shouldCreateWithNumberOfLots() {
         int numberOfSlots = 3;
@@ -37,13 +31,14 @@ class InMemoryParkingLotTest {
     }
 
     @Test
-    void create_shouldReCreateLots_whenLotsWereCreatedBefore() {
+    void create_shouldNotCreateLots_whenLotsWereCreatedBefore() {
         int numberOfSlots = 3;
-
         parkingLot.create(numberOfSlots - 2);
-        parkingLot.create(numberOfSlots);
 
-        assertEquals(numberOfSlots, parkingLot.getFreeSlotsCount());
+        var e = assertThrows(InvalidParkingStateRuntimeException.class,
+                () -> parkingLot.create(numberOfSlots));
+
+        assertEquals("Parking lot already created!", e.getMessage());
     }
 
 
@@ -215,9 +210,9 @@ class InMemoryParkingLotTest {
         var result = parkingLot.status();
 
         var it = result.iterator();
-        assertEquals(new TicketModel(1, carNum1), it.next());
-        assertEquals(new TicketModel(2, carNum2), it.next());
-        assertEquals(new TicketModel(3, carNum3), it.next());
+        assertEquals(new Ticket(1, carNum1), it.next());
+        assertEquals(new Ticket(2, carNum2), it.next());
+        assertEquals(new Ticket(3, carNum3), it.next());
         assertFalse(it.hasNext());
     }
 }

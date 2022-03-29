@@ -2,7 +2,7 @@ package eu.fogas.parking.command;
 
 import eu.fogas.parking.exception.InvalidParameterRuntimeException;
 import eu.fogas.parking.lot.ParkingLot;
-import eu.fogas.parking.lot.model.TicketModel;
+import eu.fogas.parking.lot.model.Ticket;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +15,7 @@ import java.util.Set;
 public class Status extends AbstractCommand {
     private static final String HEADER = "Slot No. Registration No.";
     private static final String COL1_PATTERN = "%-9d";
+    private static final String NEW_LINE = System.lineSeparator();
 
     private final String name = "status";
     private final int parametersCount = 0;
@@ -24,15 +25,12 @@ public class Status extends AbstractCommand {
         commandLog.info(getStatusAsString(parkingLot.status()));
     }
 
-    private String getStatusAsString(Set<TicketModel> status) {
-        var newLine = System.lineSeparator();
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(HEADER);
+    private String getStatusAsString(Set<Ticket> status) {
+        StringBuilder sb = new StringBuilder(HEADER);
         status.forEach(ticket ->
-                sb.append(newLine)
-                        .append(String.format(COL1_PATTERN, ticket.getSlotNumber()))
-                        .append(ticket.getRegistrationNumber()));
+                sb.append(NEW_LINE)
+                        .append(String.format(COL1_PATTERN, ticket.slotNumber()))
+                        .append(ticket.registrationNumber()));
         return sb.toString();
     }
 }

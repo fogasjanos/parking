@@ -1,7 +1,7 @@
 package eu.fogas.parking.lot;
 
 import eu.fogas.parking.charge.Charger;
-import eu.fogas.parking.lot.model.TicketModel;
+import eu.fogas.parking.lot.model.Ticket;
 
 import java.util.Optional;
 import java.util.Set;
@@ -14,7 +14,7 @@ public interface ParkingLot {
 
     Optional<Integer> leave(String carNumber);
 
-    Set<TicketModel> status();
+    Set<Ticket> status();
 
     int getFreeSlotsCount();
 

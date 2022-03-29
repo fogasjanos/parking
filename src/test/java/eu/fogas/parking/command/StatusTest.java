@@ -1,7 +1,7 @@
 package eu.fogas.parking.command;
 
 import eu.fogas.parking.lot.ParkingLot;
-import eu.fogas.parking.lot.model.TicketModel;
+import eu.fogas.parking.lot.model.Ticket;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -31,10 +31,10 @@ class StatusTest {
 
     @Test
     void process_shouldLogStatus() {
-        var tickets = new TreeSet<>(Comparator.comparingInt(TicketModel::getSlotNumber));
+        var tickets = new TreeSet<>(Comparator.comparingInt(Ticket::slotNumber));
         tickets.addAll(List.of(
-                new TicketModel(1, "007 JB"),
-                new TicketModel(2, "BAT 1")));
+                new Ticket(1, "007 JB"),
+                new Ticket(2, "BAT 1")));
         when(parkingLotMock.status()).thenReturn(tickets);
 
         command.process(parkingLotMock);
