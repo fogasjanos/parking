@@ -14,7 +14,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,7 +44,7 @@ class LeaveTest {
     }
 
     @Test
-    void process_shouldThrowException_whenParamterHoursNotInt() {
+    void process_shouldThrowException_whenParameterHoursNotInt() {
         var e = assertThrows(InvalidParameterRuntimeException.class,
                 () -> command.process(parkingLotMock, "OUTATIME", "P4R4M3T3R"));
 
@@ -53,7 +52,7 @@ class LeaveTest {
     }
 
     @Test
-    void process_shouldThrowException_whenParamterCarNumberEmpty() {
+    void process_shouldThrowException_whenParameterCarNumberEmpty() {
         var e = assertThrows(InvalidParameterRuntimeException.class,
                 () -> command.process(parkingLotMock, "", "P4R4M3T3R"));
 

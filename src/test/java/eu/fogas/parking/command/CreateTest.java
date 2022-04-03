@@ -41,7 +41,7 @@ class CreateTest {
     }
 
     @Test
-    void process_shouldThrowException_whenParamterNotInt() {
+    void process_shouldThrowException_whenParameterNotInt() {
         var e = assertThrows(InvalidParameterRuntimeException.class,
                 () -> command.process(parkingLotMock, "parkingLot"));
 

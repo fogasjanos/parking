@@ -154,5 +154,5 @@ gradlew run < src/test/resources/sample-input.txt
 
 
 # Possible improvements
-- AppTest is failing when all tests run from IntelliJ IDEA on src/test right-click "Run all Tests Ctlr+Alt+F10" but it's
-fine when run from gradle. Or when you type gradlew test into the IDEA's console and hit Ctlr+Enter.
+- AppTest is failing when all tests run from IntelliJ IDEA on src/test right-click "Run all Tests Ctrl+Alt+F10" but it's
+fine when run from gradle. Or when you type gradlew test into the IDEA's console and hit Ctrl+Enter.

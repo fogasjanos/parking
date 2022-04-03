@@ -9,7 +9,14 @@ import eu.fogas.parking.exception.InvalidParkingStateRuntimeException;
 import eu.fogas.parking.lot.model.Ticket;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -91,19 +98,19 @@ public class InMemoryParkingLot implements ParkingLot {
     }
 
     private class Verify {
-        private boolean isInited() {
+        private boolean isInitialized() {
             return !tickets.isEmpty() || !freeSlots.isEmpty();
         }
 
         private Verify parkingLotCreated() {
-            if (!isInited()) {
+            if (!isInitialized()) {
                 throw new InvalidParkingStateRuntimeException("Parking lot not created!");
             }
             return this;
         }
 
         private Verify parkingLotNotCreated() {
-            if (isInited()) {
+            if (isInitialized()) {
                 throw new InvalidParkingStateRuntimeException("Parking lot already created!");
             }
             return this;
@@ -111,7 +118,7 @@ public class InMemoryParkingLot implements ParkingLot {
 
         private Verify carNumber(String carNumber) {
             if (carNumber == null) {
-                throw new InvalidParameterRuntimeException("Invalid carNumber! " + carNumber);
+                throw new InvalidParameterRuntimeException("Invalid carNumber! null");
             }
             return this;
         }
