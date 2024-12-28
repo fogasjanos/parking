@@ -22,5 +22,4 @@ public class Create extends AbstractCommand {
         parkingLot.create(size);
         commandLog.info("Created parking lot with {} slots", size);
     }
-
 }

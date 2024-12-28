@@ -18,7 +18,7 @@ public class ConfigProvider {
     }
 
     public ConfigProvider(String configName) {
-        try (InputStream input = this.getClass().getClassLoader().getResourceAsStream(configName)) {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream(configName)) {
             if (input == null) {
                 log.error("Unable to find {}", configName);
                 return;
