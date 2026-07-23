@@ -1,6 +1,8 @@
 package eu.fogas.parking.charge;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,9 +19,9 @@ class ChargeCalculatorTest {
         assertTrue(charge.isEmpty());
     }
 
-    @Test
-    void getCharge_shouldReturnBasePrice_whenHoursLessThanBaseHours() {
-        int hours = 2;
+    @ParameterizedTest
+    @ValueSource(ints = { 1, 2, 3, 4, 5})
+    void getCharge_shouldReturnBasePrice_whenHoursLessOrEqualThanBaseHours(int hours) {
         int baseHours = 5;
         int basePrice = 10;
         ChargeCalculator calculator = ChargeCalculator.builder()
@@ -32,23 +34,6 @@ class ChargeCalculatorTest {
         assertTrue(charge.isPresent());
         assertEquals(basePrice, charge.get());
     }
-
-    @Test
-    void getCharge_shouldReturnBasePrice_whenHoursEqualsBaseHours() {
-        int hours = 2;
-        int baseHours = 2;
-        int basePrice = 10;
-        ChargeCalculator calculator = ChargeCalculator.builder()
-                .baseHours(baseHours)
-                .basePrice(basePrice)
-                .build();
-
-        var charge = calculator.getCharge(hours);
-
-        assertTrue(charge.isPresent());
-        assertEquals(basePrice, charge.get());
-    }
-
 
     @Test
     void getCharge_shouldReturnCalculatedPrice_whenHoursMoreThanBaseHours() {

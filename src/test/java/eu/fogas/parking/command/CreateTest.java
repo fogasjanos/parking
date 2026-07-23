@@ -4,14 +4,18 @@ import eu.fogas.parking.exception.InvalidParameterRuntimeException;
 import eu.fogas.parking.lot.ParkingLot;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
+import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
@@ -24,20 +28,20 @@ class CreateTest {
     @InjectMocks
     private Create command;
 
-    @Test
-    void process_shouldThrowException_whenParametersCountIsZero() {
+    @ParameterizedTest
+    @MethodSource("invalidParametersSupplier")
+    void process_shouldThrowException_whenParametersCountNotMatching(String[] params) {
         var e = assertThrows(InvalidParameterRuntimeException.class,
-                () -> command.process(parkingLotMock));
+                () -> command.process(parkingLotMock, params));
 
         assertEquals("Invalid parameter count! Expected: 1", e.getMessage());
     }
 
-    @Test
-    void process_shouldThrowException_whenParametersCountNotMatching() {
-        var e = assertThrows(InvalidParameterRuntimeException.class,
-                () -> command.process(parkingLotMock, "3", "12"));
-
-        assertEquals("Invalid parameter count! Expected: 1", e.getMessage());
+    private static Stream<Arguments> invalidParametersSupplier() {
+        return Stream.of(
+                Arguments.of((Object) new String[]{}),
+                Arguments.of((Object) new String[]{"3", "12"})
+        );
     }
 
     @Test
@@ -53,7 +57,7 @@ class CreateTest {
         command.process(parkingLotMock, "3");
 
         verify(parkingLotMock).create(3);
-        verify(commandLogMock).info(eq("Created parking lot with {} slots"), eq(3));
+        verify(commandLogMock).info("Created parking lot with {} slots", 3);
         verifyNoMoreInteractions(parkingLotMock, commandLogMock);
     }
 

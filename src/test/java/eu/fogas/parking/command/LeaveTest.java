@@ -5,12 +5,16 @@ import eu.fogas.parking.exception.InvalidParameterRuntimeException;
 import eu.fogas.parking.lot.ParkingLot;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,20 +31,20 @@ class LeaveTest {
     @InjectMocks
     private Leave command;
 
-    @Test
-    void process_shouldThrowException_whenParametersCountIsZero() {
+    @ParameterizedTest
+    @MethodSource("invalidParametersSupplier")
+    void process_shouldThrowException_whenParametersCountNotMatching(String[] params) {
         var e = assertThrows(InvalidParameterRuntimeException.class,
-                () -> command.process(parkingLotMock));
+                () -> command.process(parkingLotMock, params));
 
         assertEquals("Invalid parameter count! Expected: 2", e.getMessage());
     }
 
-    @Test
-    void process_shouldThrowException_whenParametersCountNotMatching() {
-        var e = assertThrows(InvalidParameterRuntimeException.class,
-                () -> command.process(parkingLotMock, "3", "12", "Five"));
-
-        assertEquals("Invalid parameter count! Expected: 2", e.getMessage());
+    private static Stream<Arguments> invalidParametersSupplier() {
+        return Stream.of(
+                Arguments.of((Object) new String[]{}),
+                Arguments.of((Object) new String[]{"3", "12", "Five"})
+        );
     }
 
     @Test
@@ -71,10 +75,10 @@ class LeaveTest {
         command.process(parkingLotMock, carNum, "1");
 
         verify(parkingLotMock).leave(carNum);
-        verify(commandLogMock).info(eq("Registration Number {} from Slot {} has left with Charge {}"),
-                eq(carNum),
-                eq(slotNum),
-                eq(cost));
+        verify(commandLogMock).info("Registration Number {} from Slot {} has left with Charge {}",
+                carNum,
+                slotNum,
+                cost);
         verifyNoMoreInteractions(parkingLotMock, commandLogMock, chargeCalculatorMock);
     }
 
@@ -82,7 +86,6 @@ class LeaveTest {
     void process_shouldLogInvalidHours_whenHoursLessThanOne() {
         String carNum = "ECTO-1";
         int slotNum = 2;
-        int cost = 99;
         when(parkingLotMock.leave(carNum)).thenReturn(Optional.of(slotNum));
         when(chargeCalculatorMock.getCharge(0)).thenReturn(Optional.empty());
         when(parkingLotMock.getCharger()).thenReturn(chargeCalculatorMock);
@@ -90,19 +93,19 @@ class LeaveTest {
         command.process(parkingLotMock, carNum, "0");
 
         verify(parkingLotMock).leave(carNum);
-        verify(commandLogMock).info(eq("Invalid hours! {}"), eq(0));
+        verify(commandLogMock).info("Invalid hours! {}", 0);
         verifyNoMoreInteractions(parkingLotMock, commandLogMock, chargeCalculatorMock);
     }
 
     @Test
-    void process_shouldLogErrorWhenRegistrationNumberNotFound() {
+    void process_shouldLogError_whenRegistrationNumberNotFound() {
         String carNum = "ECTO-1";
         when(parkingLotMock.leave(carNum)).thenReturn(Optional.empty());
 
         command.process(parkingLotMock, carNum, "1");
 
         verify(parkingLotMock).leave(carNum);
-        verify(commandLogMock).info(eq("Registration Number {} not found"), eq(carNum));
+        verify(commandLogMock).info("Registration Number {} not found", carNum);
         verifyNoMoreInteractions(parkingLotMock, commandLogMock);
     }
 
